@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Policies\BookPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -33,5 +34,11 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('is_admin' , function ($user){
+            if ($user->user_id == 3)
+                return true;
+            else
+                return false;
+        });
     }
 }
