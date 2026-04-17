@@ -9,3 +9,30 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* resources/css/app.css */
+
+/* 1. إظهار نصوص النافبار إجبارياً */
+.navbar-brand, .nav-link {
+    color: var(--bs-emphasis-color) !important;
+    display: inline-block !important;
+    padding: 10px !important;
+    text-decoration: none !important;
+}
+
+/* 2. منطق إخفاء وإظهار الأيقونات */
+[data-bs-theme="dark"] #moonIcon,
+[data-bs-theme="light"] #sunIcon {
+    display: none !important;
+}
+
+[data-bs-theme="dark"] #sunIcon,
+[data-bs-theme="light"] #moonIcon {
+    display: inline-block !important;
+}
+
+/* 3. خلفية الصفحة والنافبار */
+body {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}

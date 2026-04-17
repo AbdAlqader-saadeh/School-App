@@ -20,7 +20,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return $user->user_id == 3;
+        return $user->user_type == 3 || $user->user_type == 2;
     }
 
     /**
@@ -28,7 +28,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->user_id == 3;
+        return $user->user_type == 3;
     }
 
     /**

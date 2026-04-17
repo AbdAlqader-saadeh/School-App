@@ -13,46 +13,56 @@ class BookController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request)
-    {
+public function index(Request $request)
+{
+    $user = Auth::user();
 
-            $query = Book::query();
+    $query = \App\Models\Book::query();
 
-            if ($request->filled('search')) {
-                $search = $request->search;
+    if ($user->user_type == '3') {
 
-                $query->where('name', 'LIKE', "%{$search}%")
-                    ->orWhere('title', 'LIKE', "%{$search}%"); // هذا السطر إضافي للبحث في العنوان أيضاً
-            }
+    } 
+    elseif ($user->user_type == '2') {
 
-            $books = $query->latest()->get();
-            $user = Auth::user();
+        $query->where('books.user_id', $user->id); 
+    } 
+    elseif ($user->user_type == '1') {
 
-            return view('books.index', compact('books' , 'user'));
-
+        $myCourseIds = $user->courses()->pluck('book_id')->toArray(); 
+        $query->whereIn('books.id', $myCourseIds);
     }
+
+    // كود البحث
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('name', 'LIKE', "%{$search}%")
+              ->orWhere('title', 'LIKE', "%{$search}%");
+        });
+    }
+
+    $books = $query->latest()->get();
+    return view('books.index', compact('books', 'user'));
+}
 
 public function show($Id)
 {
 
-    if(Gate::allows('books.index'))
+
+    $book = Book::findOrFail($Id);
+
+    if (Auth::check())
     {
-        $book = Book::findOrFail($Id);
-
-
-        if (auth('student')->check()) {
-            if (auth('student')->user()->cannot('view', $book)) {
-                abort(403, 'ليس لديك صلاحية لعرض هذا الكتاب');
-            }
-        } else {
-
-            abort(403, 'يجب تسجيل الدخول كطالب');
+        if (Auth::user()->cannot('view', $book)) {
+            abort(403, 'ليس لديك صلاحية لعرض هذا الكتاب');
         }
+    } else {
 
-        return view('books.show', ['book' => $book]);
+        abort(403, 'يجب تسجيل الدخول كطالب');
     }
-    else
-        echo 'You Are Not Login';
+
+    return view('books.show', ['book' => $book]);
+    
 
 }
 }

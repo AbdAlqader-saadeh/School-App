@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->nullable();
-            
-            $table->foreign('user_id')->references('id')->on('user_type');
+            $table->foreignId('course_id')
+                  ->nullable() 
+                  ->constrained('books') 
+                  ->onDelete('set null'); 
         });
     }
 
@@ -24,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+
         });
     }
 };

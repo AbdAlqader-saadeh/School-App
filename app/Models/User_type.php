@@ -10,4 +10,6 @@ class User_type extends Model
         'name',
         'id',
     ];
+
+
 }

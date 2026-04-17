@@ -29,19 +29,27 @@ class UserController extends Controller
     {
         if (Gate::allows('is_admin' , Auth::user()))
         {
-            $students = User::where('user_id' , 1)->get();
+            $students = User::where('user_type' , 1)->get();
 
             return view('users.showstudents' , ['students' => $students]);
         }
+        elseif (Gate::allows('is_doctor' , Auth::user()))
+        {
+            $myBooks = \App\Models\Book::where('user_id', auth()->id())->pluck('id');
+            $students = \App\Models\User::whereIn('course_id', $myBooks)->get();
+            
+            return view('users.showstudents', compact('students'));
+        }
         else
             return 'You Are Not An Admin';
+
     }
 
     public function showteachers()
     {
         if (Gate::allows('is_admin' , Auth::user()))
         {
-            $teachers = User::where('user_id' , 2)->get();
+            $teachers = User::where('user_type' , 2)->get();
 
             return view('users.showteachers' , ['teachers' => $teachers]);
         }
@@ -51,11 +59,13 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
-            'user_id' => $request->user_id,
+            'user_type' => $request->user_type,
+            'course_id' => 1,
         ]);
 
         return to_route('books.index');

@@ -33,9 +33,9 @@
 
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">User Type</label>
-            <select type="email" name='user_id' class="form-control" >
+            <select type=""  name='user_type' class="form-control" >
                 @foreach ($Users_type as $user_type)
-                    <option value="{{ $user_type->id }}">{{ $user_type->name }}</option>
+                    <option value="{{ $user_type->id }}" {{ old('user_type') == $user_type->id ? 'selected' : '' }}>{{ $user_type->name }}</option>
                 @endforeach
             </select>
         </div>

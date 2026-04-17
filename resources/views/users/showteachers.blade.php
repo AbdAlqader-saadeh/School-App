@@ -19,6 +19,7 @@
                 <tr>
                     <th scope="row">{{ $teacher->id }}</th>
                     <td>{{ $teacher->name }}</td>
+                    <td>{{ $teacher->email }}</td>
                     <td>{{ $teacher->created_at }}</td>
                     <td>{{ $teacher->updated_at}}</td>
                 </tr>

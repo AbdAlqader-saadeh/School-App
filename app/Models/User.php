@@ -22,12 +22,27 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'user_id',
+        'user_type',
+        'course_id',
     ];
 
 
     public function user() {
         return $this->belongsTo(User_type::class);
+    }
+
+    public function doctorCourses() {
+        return $this->hasMany(Book::class, 'user_type');
+    }
+
+    public function courses()
+    {
+
+        return $this->belongsToMany(Book::class, 'course_user', 'user_id', 'book_id');
+    }
+
+    public function course() {
+        return $this->belongsTo(Book::class, 'course_id');
     }
     /**
      * The attributes that should be hidden for serialization.

@@ -22,12 +22,11 @@ class StudentController extends Controller
         ]);
 
         $credential = $request->only('email' , 'password');
-
         if (Auth::attempt($credential))
         {
+            // dd($credential);
+            
             return to_route('books.index');
-
-            dd($credential);
         }
 
         return back()->withInput()->with('status' , 'Invalid credential');
